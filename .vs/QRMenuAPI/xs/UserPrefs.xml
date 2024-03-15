@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{F0260B18-3BFC-4723-8029-92DFCB7B5341}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.QRMenuAPI PreferredExecutionTarget="/System/Volumes/Preboot/Cryptexes/App/System/Applications/Safari.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="QRMenuAPI/Program.cs">
+    <Files>
+      <File FileName="QRMenuAPI/Program.cs" Line="31" Column="43" />
+      <File FileName="QRMenuAPI/Controllers/CompaniesController.cs" Line="122" Column="35" />
+      <File FileName="QRMenuAPI/Controllers/UsersController.cs" Line="83" Column="9" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="QRMenuAPI" expanded="True">
+            <Node name="QRMenuAPI" expanded="True" selected="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Data" expanded="True" />
+              <Node name="Migrations" expanded="True" />
+              <Node name="Models" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
