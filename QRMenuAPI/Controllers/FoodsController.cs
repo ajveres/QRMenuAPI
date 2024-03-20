@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -25,10 +26,10 @@ namespace QRMenuAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Food>>> GetFoods()
         {
-          if (_context.Foods == null)
-          {
-              return NotFound();
-          }
+            if (_context.Foods == null)
+            {
+                return NotFound();
+            }
             return await _context.Foods.ToListAsync();
         }
 
@@ -36,10 +37,10 @@ namespace QRMenuAPI.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Food>> GetFood(int id)
         {
-          if (_context.Foods == null)
-          {
-              return NotFound();
-          }
+            if (_context.Foods == null)
+            {
+                return NotFound();
+            }
             var food = await _context.Foods.FindAsync(id);
 
             if (food == null)
@@ -53,65 +54,57 @@ namespace QRMenuAPI.Controllers
         // PUT: api/Foods/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutFood(int id, Food food)
+        [Authorize(Roles = "RestaurantAdministrator")]
+        public ActionResult PutFood(int id, Food food)
         {
-            if (id != food.Id)
-            {
-                return BadRequest();
-            }
+            var category = _context.Categories.Find(food.CategoryId);
 
+            if (User.HasClaim("RestauranId", category.RestaurantId.ToString()) == false)
+            {
+                return NotFound();
+            }
             _context.Entry(food).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!FoodExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
+            _context.SaveChanges();
             return NoContent();
         }
 
         // POST: api/Foods
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Food>> PostFood(Food food)
+        [Authorize(Roles = "RestaurantAdministrator")]
+        public string PostFood(Food food)
         {
-          if (_context.Foods == null)
-          {
-              return Problem("Entity set 'ApplicationDBContext.Foods'  is null.");
-          }
-            _context.Foods.Add(food);
-            await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetFood", new { id = food.Id }, food);
+            _context.Foods.Add(food);
+            _context.SaveChanges();
+
+            return food.Name;
         }
 
         // DELETE: api/Foods/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteFood(int id)
+        [Authorize(Roles = "RestaurantAdministrator")]
+        public ActionResult DeleteFood(int id)
         {
+            var food = _context.Foods.Find(id);
+            var category = _context.Categories.Find(food.CategoryId);
+
+            if (User.HasClaim("RestauranId", category.RestaurantId.ToString()) == false)
+            {
+                return NotFound();
+            }
             if (_context.Foods == null)
             {
                 return NotFound();
             }
-            var food = await _context.Foods.FindAsync(id);
+
             if (food == null)
             {
                 return NotFound();
             }
-
-            _context.Foods.Remove(food);
-            await _context.SaveChangesAsync();
+            food.StateId = 0;
+            _context.Foods.Update(food);
+            _context.SaveChanges();
 
             return NoContent();
         }

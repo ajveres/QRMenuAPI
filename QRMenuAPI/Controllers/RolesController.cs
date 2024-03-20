@@ -1,14 +1,13 @@
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QRMenuAPI.Data;
 using QRMenuAPI.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace QRMenuAPI.Controllers
 {
@@ -16,27 +15,25 @@ namespace QRMenuAPI.Controllers
     [ApiController]
     public class RolesController : ControllerBase
     {
-        private readonly ApplicationDBContext _context;
-        private readonly RoleManager<IdentityRole> _rolesManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RolesController(ApplicationDBContext context, RoleManager<IdentityRole> rolesManager)
+        public RolesController(RoleManager<IdentityRole> roleManager)
         {
-            _context = context;
-            _rolesManager = rolesManager;
+            _roleManager = roleManager;
         }
 
-        // GET: api/RolesManager
+        //// GET: api/Roles
         //[HttpGet]
         //public async Task<ActionResult<IEnumerable<ApplicationRole>>> GetApplicationRole()
         //{
-        //    if (_context.ApplicationRole == null)
-        //    {
-        //        return NotFound();
-        //    }
+        //  if (_context.ApplicationRole == null)
+        //  {
+        //      return NotFound();
+        //  }
         //    return await _context.ApplicationRole.ToListAsync();
         //}
 
-        //// GET: api/RolesManager/5
+        //// GET: api/Roles/5
         //[HttpGet("{id}")]
         //public async Task<ActionResult<ApplicationRole>> GetApplicationRole(string id)
         //{
@@ -54,7 +51,7 @@ namespace QRMenuAPI.Controllers
         //    return applicationRole;
         //}
 
-        //// PUT: api/RolesManager/5
+        //// PUT: api/Roles/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]
         //public async Task<IActionResult> PutApplicationRole(string id, ApplicationRole applicationRole)
@@ -85,16 +82,17 @@ namespace QRMenuAPI.Controllers
         //    return NoContent();
         //}
 
-        // POST: api/RolesManager
+        // POST: api/Roles
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public void PostApplicationRole(string roleName)
+        public void PostApplicationRole(string name)
         {
-            IdentityRole identityRole = new IdentityRole(roleName);
-            _rolesManager.CreateAsync(identityRole).Wait();
+
+            IdentityRole applicationRole = new IdentityRole(name);
+            _roleManager.CreateAsync(applicationRole).Wait();
         }
 
-        //// DELETE: api/RolesManager/5
+        //// DELETE: api/Roles/5
         //[HttpDelete("{id}")]
         //public async Task<IActionResult> DeleteApplicationRole(string id)
         //{

@@ -29,7 +29,11 @@ namespace QRMenuAPI.Models
         [Column(TypeName = "smalldatetime")]
         public DateTime RegisterationDate { get; set; }
 
-        
+        [EmailAddress]
+        [StringLength(100)]
+        [Column(TypeName = "varchar(100)")]
+        public string EMail { get; set; } = "";
+
 
         public int CompanyId { get; set; }
         [ForeignKey("CompanyId")]
@@ -38,6 +42,8 @@ namespace QRMenuAPI.Models
         public byte StateId { get; set; }
         [ForeignKey("StateId")]
         public State? State { get; set; }
+
+        public virtual List<Category> Categories { get; set; }
 
         
     }

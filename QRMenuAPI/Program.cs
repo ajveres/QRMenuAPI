@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using QRMenuAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using System.Security.Claims;
 
 namespace QRMenuAPI;
 
@@ -86,6 +87,8 @@ public class Program
                         roleManager.CreateAsync(identityRole).Wait();
                         identityRole = new IdentityRole("CompanyAdministrator");
                         roleManager.CreateAsync(identityRole).Wait();
+                        identityRole = new IdentityRole("RestaurantAdministrator");
+                        roleManager.CreateAsync(identityRole).Wait();
                     }
                 }
                 UserManager<ApplicationUser>? userManager = app.Services.CreateScope().ServiceProvider.GetService<UserManager<ApplicationUser>>();
@@ -95,6 +98,8 @@ public class Program
                     {
                         if (company != null)
                         {
+                            Claim claim;
+                            
                             applicationUser = new ApplicationUser();
                             applicationUser.UserName = "Administrator";
                             applicationUser.CompanyId = company.Id;
@@ -105,6 +110,8 @@ public class Program
                             applicationUser.StateId = 1;
                             userManager.CreateAsync(applicationUser, "Admin123!").Wait();
                             userManager.AddToRoleAsync(applicationUser, "Administrator").Wait();
+                            claim = new Claim("CompanyId", company.Id.ToString());
+                            userManager.AddClaimAsync(applicationUser, claim).Wait();
                         }
                     }
                 }

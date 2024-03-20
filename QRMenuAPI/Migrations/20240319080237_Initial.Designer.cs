@@ -12,8 +12,8 @@ using QRMenuAPI.Data;
 namespace QRMenuAPI.Migrations
 {
     [DbContext(typeof(ApplicationDBContext))]
-    [Migration("20240311112811_Initial3")]
-    partial class Initial3
+    [Migration("20240319080237_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -330,6 +330,41 @@ namespace QRMenuAPI.Migrations
                     b.ToTable("Companies");
                 });
 
+            modelBuilder.Entity("QRMenuAPI.Models.Food", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CategoryId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<float>("Price")
+                        .HasColumnType("real");
+
+                    b.Property<byte>("StateId")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("StateId");
+
+                    b.ToTable("Foods");
+                });
+
             modelBuilder.Entity("QRMenuAPI.Models.Restaurant", b =>
                 {
                     b.Property<int>("Id")
@@ -345,6 +380,11 @@ namespace QRMenuAPI.Migrations
 
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
+
+                    b.Property<string>("EMail")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("varchar(100)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -374,6 +414,21 @@ namespace QRMenuAPI.Migrations
                     b.HasIndex("StateId");
 
                     b.ToTable("Restaurants");
+                });
+
+            modelBuilder.Entity("QRMenuAPI.Models.RestaurantUser", b =>
+                {
+                    b.Property<int>("RestaurantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("RestaurantId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RestaurantUsers");
                 });
 
             modelBuilder.Entity("QRMenuAPI.Models.State", b =>
@@ -491,6 +546,25 @@ namespace QRMenuAPI.Migrations
                     b.Navigation("State");
                 });
 
+            modelBuilder.Entity("QRMenuAPI.Models.Food", b =>
+                {
+                    b.HasOne("QRMenuAPI.Models.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("QRMenuAPI.Models.State", "State")
+                        .WithMany()
+                        .HasForeignKey("StateId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Category");
+
+                    b.Navigation("State");
+                });
+
             modelBuilder.Entity("QRMenuAPI.Models.Restaurant", b =>
                 {
                     b.HasOne("QRMenuAPI.Models.Company", "Company")
@@ -508,6 +582,25 @@ namespace QRMenuAPI.Migrations
                     b.Navigation("Company");
 
                     b.Navigation("State");
+                });
+
+            modelBuilder.Entity("QRMenuAPI.Models.RestaurantUser", b =>
+                {
+                    b.HasOne("QRMenuAPI.Models.Restaurant", "Restaurant")
+                        .WithMany()
+                        .HasForeignKey("RestaurantId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("QRMenuAPI.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ApplicationUser");
+
+                    b.Navigation("Restaurant");
                 });
 #pragma warning restore 612, 618
         }

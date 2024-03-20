@@ -28,5 +28,7 @@ namespace QRMenuAPI.Models
         public byte StateId { get; set; }
         [ForeignKey("StateId")]
         public State? State { get; set; }
+
+        public virtual List<Food> Foods { get; set; }
     }
 }
