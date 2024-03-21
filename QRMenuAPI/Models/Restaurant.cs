@@ -1,12 +1,14 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using QRMenuAPI.Models;
 
 namespace QRMenuAPI.Models
 {
     public class Restaurant
     {
+        //deneme
         [Key]
         public int Id { get; set; }
 
@@ -37,6 +39,7 @@ namespace QRMenuAPI.Models
 
         public int CompanyId { get; set; }
         [ForeignKey("CompanyId")]
+        [JsonIgnore]
         public Company? Company { get; set; }
 
         public byte StateId { get; set; }

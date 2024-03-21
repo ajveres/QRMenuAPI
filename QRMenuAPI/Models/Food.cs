@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using QRMenuAPI.Models;
 
 namespace QRMenuAPI.Models
@@ -28,6 +29,7 @@ namespace QRMenuAPI.Models
 
         public int CategoryId { get; set; }
         [ForeignKey("CategoryId")]
+        [JsonIgnore]
         public Category? Category { get; set; }
 
         //fotoğraf ve indirim yazılacak

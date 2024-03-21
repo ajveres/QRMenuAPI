@@ -37,6 +37,23 @@ namespace QRMenuAPI.Controllers
             }
             return await _context.Restaurants.ToListAsync();
         }
+        [HttpGet("Menu/{id}")]
+        public ActionResult<Restaurant> GetMenu(int id)
+        {
+            List<object> categoryList = new List<object>();
+            List<object> foodList = new List<object>();
+
+            if (_context.Restaurants == null)
+            {
+                return NotFound();
+            }
+            var restaurant = _context.Restaurants.Include(r => r.Categories).ThenInclude(c => c.Foods).FirstOrDefault(r => r.Id == id);
+            if (restaurant == null)
+            {
+                return NotFound();
+            }
+            return restaurant;
+        }
 
         // GET: api/Restaurants/5
         [HttpGet("{id}")]

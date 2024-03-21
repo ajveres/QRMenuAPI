@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 using QRMenuAPI.Models;
 
 
@@ -22,6 +23,7 @@ namespace QRMenuAPI.Models
 
         public int RestaurantId { get; set; }
         [ForeignKey("RestaurantId")]
+        [JsonIgnore]
         public Restaurant? Restaurant { get; set; }
 
         [Column(TypeName = "tinyint")]
