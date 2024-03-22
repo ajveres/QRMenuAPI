@@ -46,7 +46,7 @@ namespace QRMenuAPI.Models
         [ForeignKey("StateId")]
         public State? State { get; set; }
 
-        public virtual List<Category> Categories { get; set; }
+        public virtual List<Category>? Categories { get; set; }
 
         
     }
